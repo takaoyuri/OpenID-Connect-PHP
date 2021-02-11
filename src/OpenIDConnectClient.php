@@ -661,7 +661,8 @@ class OpenIDConnectClient
         }
 
         // If the client supports Proof Key for Code Exchange (PKCE)
-        if (!empty($this->getCodeChallengeMethod()) && in_array($this->getCodeChallengeMethod(), $this->getProviderConfigValue('code_challenge_methods_supported'))) {
+        $code_challenge_method = $this->getCodeChallengeMethod();
+        if (!empty($code_challenge_method) && in_array($code_challenge_method, $this->getProviderConfigValue('code_challenge_methods_supported'))) {
             $codeVerifier = bin2hex(random_bytes(64));
             $this->setCodeVerifier($codeVerifier);
             if (!empty($this->pkceAlgs[$this->getCodeChallengeMethod()])) {
@@ -772,7 +773,9 @@ class OpenIDConnectClient
 	        unset($token_params['client_id']);
         }
 
-        if (!empty($this->getCodeChallengeMethod()) && !empty($this->getCodeVerifier())) {
+        $code_challenge_method = $this->getCodeChallengeMethod();
+        $code_verifier = $this->getCodeverifier();
+        if (!empty($code_challenge_method) && !empty($code_verifier)) {
             $headers = [];
             unset($token_params['client_secret']);
             $token_params = array_merge($token_params, array(
